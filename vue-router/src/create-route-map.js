@@ -87,6 +87,7 @@ function addRouteRecord (
 
   const pathToRegexpOptions: PathToRegexpOptions =
     route.pathToRegexpOptions || {}
+    // 返回拼接好的路径（包括嵌套路径）
   const normalizedPath = normalizePath(path, parent, pathToRegexpOptions.strict)
 
   if (typeof route.caseSensitive === 'boolean') {
@@ -112,7 +113,7 @@ function addRouteRecord (
           ? route.props
           : { default: route.props }
   }
-  
+
   // 如果该路由记录 嵌套路由的话 就循环遍历解析嵌套路由
   if (route.children) {
     // Warn if route is named, does not redirect and has a default child route.
