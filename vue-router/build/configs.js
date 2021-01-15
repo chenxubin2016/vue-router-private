@@ -16,36 +16,36 @@ const resolve = _path => path.resolve(__dirname, '../', _path)
 
 module.exports = [
   // browser dev
-  {
-    file: resolve('dist/vue-router.js'),
-    format: 'umd',
-    env: 'development'
-  },
-  {
-    file: resolve('dist/vue-router.min.js'),
-    format: 'umd',
-    env: 'production'
-  },
-  {
-    file: resolve('dist/vue-router.common.js'),
-    format: 'cjs'
-  },
+  // {
+  //   file: resolve('dist/vue-router.js'),
+  //   format: 'umd',
+  //   env: 'development'
+  // },
+  // {
+  //   file: resolve('dist/vue-router.min.js'),
+  //   format: 'umd',
+  //   env: 'production'
+  // },
+  // {
+  //   file: resolve('dist/vue-router.common.js'),
+  //   format: 'cjs'
+  // },
   {
     file: resolve('dist/vue-router.esm.js'),
     format: 'es'
   },
-  {
-    file: resolve('dist/vue-router.esm.browser.js'),
-    format: 'es',
-    env: 'development',
-    transpile: false
-  },
-  {
-    file: resolve('dist/vue-router.esm.browser.min.js'),
-    format: 'es',
-    env: 'production',
-    transpile: false
-  }
+  // {
+  //   file: resolve('dist/vue-router.esm.browser.js'),
+  //   format: 'es',
+  //   env: 'development',
+  //   transpile: false
+  // },
+  // {
+  //   file: resolve('dist/vue-router.esm.browser.min.js'),
+  //   format: 'es',
+  //   env: 'production',
+  //   transpile: false
+  // }
 ].map(genConfig)
 
 function genConfig (opts) {

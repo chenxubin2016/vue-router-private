@@ -26,10 +26,13 @@ export function pushState (url?: string, replace?: boolean) {
   saveScrollPosition()
   // try...catch the pushState call to get around Safari
   // DOM Exception 18 where it limits to 100 pushState calls
+  // 加了 try...catch 是因为 Safari 有调用 pushState 100 次限制
+  // 一旦达到就会抛出 DOM Exception 18 错误
   const history = window.history
   try {
     if (replace) {
       // preserve existing history state as it could be overriden by the user
+      // replace 的话 key 还是当前的 key 没必要生成新的
       const stateCopy = extend({}, history.state)
       stateCopy.key = getStateKey()
       history.replaceState(stateCopy, '', url)
@@ -37,6 +40,7 @@ export function pushState (url?: string, replace?: boolean) {
       history.pushState({ key: setStateKey(genStateKey()) }, '', url)
     }
   } catch (e) {
+    // 达到限制了 则重新指定新的地址
     window.location[replace ? 'replace' : 'assign'](url)
   }
 }

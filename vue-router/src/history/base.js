@@ -168,7 +168,7 @@ export class History {
       this.ensureURL()
       return abort(createNavigationDuplicatedError(current, route))
     }
-    // 通过异步队列来交叉对比当前路由的路由记录和现在的这个路由的路由记录 
+    // 通过异步队列来交叉对比当前路由的路由记录和现在的这个路由的路由记录
     // 为了能准确得到父子路由更新的情况下可以确切的知道 哪些组件需要更新 哪些不需要更新
     const { updated, deactivated, activated } = resolveQueue(
       this.current.matched,
@@ -188,7 +188,7 @@ export class History {
       // 异步组件
       resolveAsyncComponents(activated)
     )
-    // 队列执行的iterator函数 
+    // 队列执行的iterator函数
     const iterator = (hook: NavigationGuard, next) => {
       if (this.pending !== route) {
         return abort(createNavigationCancelledError(current, route))
@@ -246,7 +246,7 @@ export class History {
       })
     })
   }
-
+  //更新路由
   updateRoute (route: Route) {
     this.current = route
     this.cb && this.cb(route)

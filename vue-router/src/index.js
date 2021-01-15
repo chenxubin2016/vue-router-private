@@ -38,18 +38,18 @@ export default class VueRouter {
   resolveHooks: Array<?NavigationGuard>
   afterHooks: Array<?AfterNavigationHook>
 
-  constructor (options: RouterOptions = {}) {
+  constructor(options: RouterOptions = {}) {
     this.app = null
     this.apps = []
     this.options = options
     this.beforeHooks = []
     this.resolveHooks = []
     this.afterHooks = []
-    // 创建 matcher 匹配函数，createMatcher函数返回一个对象 {match, addRoutes}
+    // 创建 matcher 匹配函数，createMatcher函数返回 {match, addRoutes}
     this.matcher = createMatcher(options.routes || [], this)
     // 默认hash模式
     let mode = options.mode || 'hash'
-    // h5的history有兼容性 对history做降级处理
+    // h5的history有兼容性问题 对history做降级处理
     this.fallback =
       mode === 'history' && !supportsPushState && options.fallback !== false
     if (this.fallback) {
@@ -77,22 +77,22 @@ export default class VueRouter {
     }
   }
 
-  match (raw: RawLocation, current?: Route, redirectedFrom?: Location): Route {
+  match(raw: RawLocation, current?: Route, redirectedFrom?: Location): Route {
     return this.matcher.match(raw, current, redirectedFrom)
   }
 
-  get currentRoute (): ?Route {
+  get currentRoute(): ?Route {
     return this.history && this.history.current
   }
 
-  init (app: any /* Vue component instance */) {
+  init(app: any /* Vue component instance */) {
     process.env.NODE_ENV !== 'production' &&
-      assert(
-        install.installed,
-        `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +
-          `before creating root instance.`
-      )
-    // vueRouter可能会实例化多次 apps用于存放多个vueRouter实例
+    assert(
+      install.installed,
+      `not installed. Make sure to call \`Vue.use(VueRouter)\` ` +
+      `before creating root instance.`
+    )
+    // vue可能会实例化多次 apps用于存放多个vue实例
     this.apps.push(app)
 
     // set up app destroyed handler
@@ -148,28 +148,28 @@ export default class VueRouter {
       })
     })
   }
-
-  beforeEach (fn: Function): Function {
+  // 路由跳转之前
+  beforeEach(fn: Function): Function {
     return registerHook(this.beforeHooks, fn)
   }
-
-  beforeResolve (fn: Function): Function {
+  // 路由导航被确认之间前
+  beforeResolve(fn: Function): Function {
     return registerHook(this.resolveHooks, fn)
   }
-
-  afterEach (fn: Function): Function {
+  // 路由跳转之后
+  afterEach(fn: Function): Function {
     return registerHook(this.afterHooks, fn)
   }
-
-  onReady (cb: Function, errorCb?: Function) {
+  // 第一次路由跳转完成时被调用的回调函数
+  onReady(cb: Function, errorCb?: Function) {
     this.history.onReady(cb, errorCb)
   }
-
-  onError (errorCb: Function) {
+  // 路由报错
+  onError(errorCb: Function) {
     this.history.onError(errorCb)
   }
-
-  push (location: RawLocation, onComplete?: Function, onAbort?: Function) {
+  // 路由添加，这个方法会向history栈添加一个记录，点击后退会返回到上一个页面。
+  push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
     // $flow-disable-line
     if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
       return new Promise((resolve, reject) => {
@@ -179,8 +179,8 @@ export default class VueRouter {
       this.history.push(location, onComplete, onAbort)
     }
   }
-
-  replace (location: RawLocation, onComplete?: Function, onAbort?: Function) {
+  // 这个方法不会向history里面添加新的记录，点击返回，会跳转到上上一个页面。上一个记录是不存在的。
+  replace(location: RawLocation, onComplete?: Function, onAbort?: Function) {
     // $flow-disable-line
     if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
       return new Promise((resolve, reject) => {
@@ -190,20 +190,21 @@ export default class VueRouter {
       this.history.replace(location, onComplete, onAbort)
     }
   }
-
-  go (n: number) {
+  // 相对于当前页面向前或向后跳转多少个页面,类似 window.history.go(n)。n可为正数可为负数。正数返回上一个页面
+  go(n: number) {
     this.history.go(n)
   }
-
-  back () {
+  // 后退到上一个页面
+  back() {
     this.go(-1)
   }
-
-  forward () {
+  // 前进到下一个页面
+  forward() {
     this.go(1)
   }
+
   // 获取匹配到的路由组件
-  getMatchedComponents (to?: RawLocation | Route): Array<any> {
+  getMatchedComponents(to?: RawLocation | Route): Array<any> {
     const route: any = to
       ? to.matched
         ? to
@@ -222,7 +223,7 @@ export default class VueRouter {
     )
   }
 
-  resolve (
+  resolve(
     to: RawLocation,
     current?: Route,
     append?: boolean
@@ -249,8 +250,8 @@ export default class VueRouter {
       resolved: route
     }
   }
-
-  addRoutes (routes: Array<RouteConfig>) {
+  // 动态添加路由
+  addRoutes(routes: Array<RouteConfig>) {
     this.matcher.addRoutes(routes)
     if (this.history.current !== START) {
       this.history.transitionTo(this.history.getCurrentLocation())
@@ -258,7 +259,7 @@ export default class VueRouter {
   }
 }
 
-function registerHook (list: Array<any>, fn: Function): Function {
+function registerHook(list: Array<any>, fn: Function): Function {
   list.push(fn)
   return () => {
     const i = list.indexOf(fn)
@@ -266,7 +267,7 @@ function registerHook (list: Array<any>, fn: Function): Function {
   }
 }
 
-function createHref (base: string, fullPath: string, mode) {
+function createHref(base: string, fullPath: string, mode) {
   var path = mode === 'hash' ? '#' + fullPath : fullPath
   return base ? cleanPath(base + '/' + path) : path
 }

@@ -14,9 +14,9 @@ export function install (Vue) {
   _Vue = Vue
 
   const isDef = v => v !== undefined
-
+  // 实例注册
   const registerInstance = (vm, callVal) => {
-    let i = vm.$options._parentVnode
+    let i = vm.$options._parentVnode  // 至少存在一个 VueComponent 时, _parentVnode 属性才存在
     if (isDef(i) && isDef(i = i.data) && isDef(i = i.registerRouteInstance)) {
       i(vm, callVal)
     }
@@ -25,7 +25,6 @@ export function install (Vue) {
    * 注册vue-router的时候，给所有的vue组件混入两个生命周期beforeCreate、destroyed
    * 在beforeCreated中初始化vue-router，并将_route响应式
    */
-
   Vue.mixin({
     beforeCreate () {
       // 如果vue实例的自定义属性有router的时，
